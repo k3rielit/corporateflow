@@ -7,9 +7,9 @@ use Illuminate\Support\ServiceProvider;
 class ClubcardServiceProvider extends ServiceProvider
 {
 
-    public function boot()
+    public function boot(): void
     {
-        // ...
+        $this->app->register(ClubcardRouteServiceProvider::class);
     }
 
 }
