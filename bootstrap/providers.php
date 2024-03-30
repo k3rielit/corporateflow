@@ -2,5 +2,7 @@
 
 return [
     App\Providers\AppServiceProvider::class,
-    \Modules\Clubcard\Providers\ClubcardRouteServiceProvider::class,
+    App\Providers\Filament\AdminPanelProvider::class,
+    App\Providers\Filament\UserPanelProvider::class,
+    Modules\Clubcard\Providers\ClubcardRouteServiceProvider::class,
 ];
