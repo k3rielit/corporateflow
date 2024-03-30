@@ -3,13 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -44,4 +48,21 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Determine whether a User has access to the given Filament panel.
+     * @param Panel $panel Filament panel instance.
+     * @return bool
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        try {
+            $panelId = $panel->getId();
+            return auth()?->user()?->can("access panel {$panelId}") ?? false;
+        } catch (\Throwable $exception) {
+            Log::error("User panel access couldn't be determined: " . $exception->getMessage());
+        }
+        return false;
+    }
+
 }
