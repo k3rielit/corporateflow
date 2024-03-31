@@ -5,6 +5,7 @@ namespace Modules\Clubcard\Api;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class ClubcardApi
 {
@@ -94,17 +95,36 @@ class ClubcardApi
     public function getHeaders(): array
     {
         return [
+            'Content-Type' => 'application/json;charset=UTF-8',
+            'Accept' => 'application/json',
+            'DeviceUUID' => $this->getDeviceUUID(),
             'User-Agent' => $this->getUserAgent(),
             'Country-Code' => $this->getCountryCode(),
         ];
     }
 
+    // Requests - General
+
+    public function getDeviceUUID(): ?string
+    {
+        $request = new GuzzleRequest('GET', '/v3/devices/uuid');
+        $response = $this->client->send($request);
+        $content = $response->getBody()->getContents();
+        return json_decode($content)->device_uuid;
+    }
+
     // Requests - Registration
 
-    public function registrationIghsCheck(): string
+    public function registrationIghsCheck(string $email, string $password): ?string
     {
-        $request = new GuzzleRequest('POST', '/v3/registrations/ighs/check');
-        return '';
+        $body = json_encode([
+            'email' => $email,
+            'password' => $password,
+        ]);
+        $request = new GuzzleRequest('POST', '/v3/registrations/ighs/check', $this->getHeaders(), $body);
+        $response = $this->client->send($request);
+        $content = $response->getBody()->getContents();
+        return json_decode($content)->status;
     }
 
 }
