@@ -3,6 +3,8 @@
 namespace Modules\Clubcard\Tests;
 
 use Modules\Clubcard\Api\ClubcardApi;
+use Modules\Clubcard\Enums\RegistrationIghsCheckEnum;
+use Modules\Clubcard\Enums\RegistrationMcaRemoteStatusEnum;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Validator;
 
@@ -28,7 +30,7 @@ class ClubcardEndpointTest extends TestCase
             ['device_uuid' => $deviceUuid],
             ['device_uuid' => 'required|uuid']
         );
-        $this->assertTrue($validator->passes());
+        $this->assertTrue($validator->passes(), "Failed to assert that " . ($deviceUuid ?? 'NULL') . " passes the required|uuid validation.");
     }
 
 }

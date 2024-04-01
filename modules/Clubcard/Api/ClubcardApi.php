@@ -120,13 +120,25 @@ class ClubcardApi
 
     // Requests - Registration
 
-    public function registrationIghsCheck(string $email, string $password): ?string
+    public function registrationIghsCheck(?string $email, ?string $password): ?string
     {
         $body = json_encode([
             'email' => $email,
             'password' => $password,
         ]);
         $request = new GuzzleRequest('POST', '/v3/registrations/ighs/check', $this->getHeaders(), $body);
+        $response = $this->client->send($request);
+        $content = $response->getBody()->getContents();
+        return json_decode($content)->status;
+    }
+
+    public function registrationMcaRemoteStatus(?string $email, ?string $password): ?string
+    {
+        $body = json_encode([
+            'email' => $email,
+            'password' => $password,
+        ]);
+        $request = new GuzzleRequest('POST', '/v3/registrations/mca/remote-status', $this->getHeaders(), $body);
         $response = $this->client->send($request);
         $content = $response->getBody()->getContents();
         return json_decode($content)->status;
