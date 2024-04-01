@@ -151,4 +151,31 @@ class ClubcardApi
         return json_decode($content)->status;
     }
 
+    public function registrationStep(?string $email): int
+    {
+        $request = new GuzzleRequest('GET', "/v3/registrations/status?email={$email}", $this->getHeaders());
+        $response = $this->client->send($request);
+        $content = $response->getBody()->getContents();
+        return json_decode($content)->step;
+    }
+
+    public function registration(?string $email, ?string $password): bool
+    {
+        $body = json_encode([
+            'email' => $email,
+            'password' => $password,
+        ]);
+        $request = new GuzzleRequest('POST', '/v3/registrations/', $this->getHeaders(), $body);
+        $response = $this->client->send($request);
+        return $response->getStatusCode() === 204;
+    }
+
+    public function registrationClubcard(?string $email): ?string
+    {
+        $request = new GuzzleRequest('GET', "/v3/registrations/clubcard?email={$email}", $this->getHeaders());
+        $response = $this->client->send($request);
+        $content = $response->getBody()->getContents();
+        return json_decode($content)->step;
+    }
+
 }
