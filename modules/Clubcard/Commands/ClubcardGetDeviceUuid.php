@@ -13,8 +13,7 @@ class ClubcardGetDeviceUuid extends Command
 
     public function handle()
     {
-        $api = new ClubcardApi();
-        $uuid = $api->getDeviceUUID();
+        $uuid = ClubcardApi::make()->getDeviceUUID();
         $this->info($uuid);
     }
 

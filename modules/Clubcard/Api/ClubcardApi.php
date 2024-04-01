@@ -22,6 +22,11 @@ class ClubcardApi
         ]);
     }
 
+    public static function make(?string $baseUri = null): static
+    {
+        return new static($baseUri);
+    }
+
     // User agent
 
     public function userAgent(string $userAgent): static
