@@ -23,6 +23,19 @@ class ClubcardEndpointTest extends TestCase
         parent::tearDown();
     }
 
+    public function test_header_merging(): void
+    {
+        $mergeHeaders = [
+            'DeviceUUID' => '3e2a5ce0-f019-11ee-ae3d-f9ed3fce8ff2',
+            'Accept' => '*/*',
+        ];
+        $headers = $this->api->getHeaders($mergeHeaders);
+        foreach ($mergeHeaders as $header => $value) {
+            $this->assertArrayHasKey($header, $headers, "Header '{$header} => {$value}' was not included: " . json_encode($headers));
+            $this->assertEquals($value, $headers[$header] ?? null, "Header '{$header} => {$value}' overriding failed: " . json_encode($headers));
+        }
+    }
+
     public function test_device_uuid(): void
     {
         $deviceUuid = $this->api->getDeviceUUID();

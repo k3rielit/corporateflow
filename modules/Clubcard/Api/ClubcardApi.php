@@ -97,15 +97,22 @@ class ClubcardApi
 
     // Headers
 
-    public function getHeaders(): array
+    public function getHeaders(array $merge = []): array
     {
-        return [
+        $headers = [
             'Content-Type' => 'application/json;charset=UTF-8',
             'Accept' => 'application/json',
-            'DeviceUUID' => $this->getDeviceUUID(),
             'User-Agent' => $this->getUserAgent(),
             'Country-Code' => $this->getCountryCode(),
         ];
+        return array_merge($headers, $merge);
+    }
+
+    public function getHeadersWithDeviceUuid(): array
+    {
+        return $this->getHeaders([
+            'DeviceUUID' => $this->getDeviceUUID(),
+        ]);
     }
 
     // Requests - General
