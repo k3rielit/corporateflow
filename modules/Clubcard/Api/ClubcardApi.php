@@ -6,6 +6,7 @@ use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Modules\Clubcard\Dto\ClubcardPersonalDataDto;
 
 class ClubcardApi
 {
@@ -175,7 +176,23 @@ class ClubcardApi
         $request = new GuzzleRequest('GET', "/v3/registrations/clubcard?email={$email}", $this->getHeaders());
         $response = $this->client->send($request);
         $content = $response->getBody()->getContents();
-        return json_decode($content)->step;
+        return json_decode($content)->clubcard_number;
+    }
+
+    public function registrationClubcardSkeletonCheck(string|int|null $clubcard): bool
+    {
+        $request = new GuzzleRequest('GET', "/v3/registrations/clubcard/skeleton?number={$clubcard}", $this->getHeaders());
+        $response = $this->client->send($request);
+        $content = $response->getBody()->getContents();
+        return json_decode($content)->isSkeleton ?? false;
+    }
+
+    public function registrationPersonalData(ClubcardPersonalDataDto $data): bool
+    {
+        $request = new GuzzleRequest('POST', "/v3/registrations/personal_data", $this->getHeaders(), $data->toJson());
+        $response = $this->client->send($request);
+        $content = $response->getBody()->getContents();
+        return json_decode($content)->realtime ?? false;
     }
 
 }
