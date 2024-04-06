@@ -8,6 +8,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Modules\Clubcard\Dto\ClubcardPersonalDataDto;
 
+/**
+ * Postman documentation
+ * https://www.postman.com/k3rielit/workspace/tesco-application-api
+ */
 class ClubcardApi
 {
     protected Collection $userAgents;
