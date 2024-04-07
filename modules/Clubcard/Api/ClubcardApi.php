@@ -124,7 +124,7 @@ class ClubcardApi
 
     public function getDeviceUUID(): ?string
     {
-        $request = new GuzzleRequest('GET', '/v3/devices/uuid');
+        $request = new GuzzleRequest('GET', '/v3/devices/uuid', $this->getHeaders());
         $response = $this->client->send($request);
         $content = $response->getBody()->getContents();
         return json_decode($content)->device_uuid;
@@ -193,7 +193,7 @@ class ClubcardApi
 
     public function registrationPersonalData(ClubcardPersonalDataDto $data): bool
     {
-        $request = new GuzzleRequest('POST', "/v3/registrations/personal_data", $this->getHeaders(), $data->toJson());
+        $request = new GuzzleRequest('POST', "/v3/registrations/personal_data", $this->getHeadersWithDeviceUuid(), $data->toJson());
         $response = $this->client->send($request);
         $content = $response->getBody()->getContents();
         return json_decode($content)->realtime ?? false;

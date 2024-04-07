@@ -12,9 +12,6 @@ class Clubcard extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'number';
-    public $incrementing = false;
-    
     protected $fillable = [
         'number',
         'email',

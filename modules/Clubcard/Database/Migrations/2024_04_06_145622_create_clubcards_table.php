@@ -12,7 +12,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('clubcards', function (Blueprint $table) {
-            $table->integer('number')->unique()->primary();
+            $table->id();
+            $table->string('number')->unique();
             $table->string('email');
             $table->string('password');
             $table->foreignIdFor(\App\Models\User::class)->nullable();

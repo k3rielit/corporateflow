@@ -5,6 +5,7 @@ namespace Modules\Clubcard\Providers;
 use Illuminate\Support\ServiceProvider;
 use Modules\Clubcard\Commands\ClubcardGetDeviceUuid;
 use Illuminate\Support\Facades\Gate;
+use Modules\Clubcard\Commands\GenerateClubcard;
 use Modules\Clubcard\Models\Clubcard;
 use Modules\Clubcard\Policies\ClubcardPolicy;
 
@@ -15,6 +16,7 @@ class ClubcardServiceProvider extends ServiceProvider
     {
         $this->commands([
             ClubcardGetDeviceUuid::class,
+            GenerateClubcard::class,
         ]);
         $this->mergeConfigFrom(__DIR__ . '/../Configuration/clubcard.php', 'clubcard');
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');

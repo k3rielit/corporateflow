@@ -37,9 +37,8 @@ class ClubcardPersonalDataDto
      */
     public function fake(string $locale = 'hu_HU'): static
     {
-        /** @var \Faker\Generator $faker */
-        $faker = FakerFactory::create($locale);
-        $this->birthdate = $faker->date();
+        $faker = fake($locale);
+        $this->birthdate = $faker->date('Y-m-d', '2000-01-01');
         $this->city = $faker->city();
         $this->firstName = $faker->firstNameMale();
         $this->lastName = $faker->firstNameMale();
