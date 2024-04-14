@@ -38,6 +38,15 @@ class ClubcardFactory extends Factory
         });
     }
 
+    public function randomEmail(): static
+    {
+        return $this->state(function () {
+            return [
+                'email' => fake()->freeEmail(),
+            ];
+        });
+    }
+
     public function email(string $email): static
     {
         return $this->state(function () use ($email) {

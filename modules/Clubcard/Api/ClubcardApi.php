@@ -6,6 +6,7 @@ use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Modules\Clubcard\Dto\ClubcardAuthorizationDto;
 use Modules\Clubcard\Dto\ClubcardPersonalDataDto;
 
 /**
@@ -197,6 +198,21 @@ class ClubcardApi
         $response = $this->client->send($request);
         $content = $response->getBody()->getContents();
         return json_decode($content)->realtime ?? false;
+    }
+
+    // Requests - Home
+
+    public function login(string|int|null $clubcard, ?string $email, ?string $password): ClubcardAuthorizationDto
+    {
+        $body = json_encode([
+            'clubcardNumber' => "{$clubcard}",
+            'email' => $email,
+            'password' => $password,
+        ]);
+        $request = new GuzzleRequest('POST', "/v3/login", $this->getHeadersWithDeviceUuid(), $body);
+        $response = $this->client->send($request);
+        $content = $response->getBody()->getContents();
+        return ClubcardAuthorizationDto::fromJson($content);
     }
 
 }
