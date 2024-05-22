@@ -15,6 +15,7 @@ class HeartbeatServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__ . '/../Views', 'heartbeat');
+        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
 }
