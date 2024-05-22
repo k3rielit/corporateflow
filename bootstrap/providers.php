@@ -8,4 +8,5 @@ return [
     Modules\Barcode\Providers\BarcodeServiceProvider::class,
     Modules\Clubcard\Providers\ClubcardServiceProvider::class,
     Modules\Permission\Providers\PermissionServiceProvider::class,
+    Modules\Heartbeat\Providers\HeartbeatServiceProvider::class,
 ];
