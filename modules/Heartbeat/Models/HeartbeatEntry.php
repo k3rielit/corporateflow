@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Heartbeat\Database\Factories\HeartbeatEntryFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\Heartbeat\Dto\CpuUsage;
+use Modules\Heartbeat\Dto\CpuInformation;
+use Modules\Heartbeat\Dto\DiskInformation;
 use Modules\Heartbeat\Dto\GitInformation;
 use Modules\Heartbeat\Dto\MemoryInformation;
 use RuntimeException;
@@ -38,7 +39,7 @@ class HeartbeatEntry extends Model
 
     public function cpu(): static
     {
-        $this->cpu_usage = CpuUsage::make()->init()->usage;
+        $this->cpu_usage = CpuInformation::make()->init()->usage;
         return $this;
     }
 
@@ -53,13 +54,10 @@ class HeartbeatEntry extends Model
 
     public function disk(): static
     {
-        $path = base_path();
-        $total = intval(round(disk_total_space($path) / 1024 / 1024));
-        $free = intval(round(disk_free_space($path) / 1024 / 1024));
-
-        $this->disk_total = $total;
-        $this->disk_free = $free;
-        $this->disk_used = $total - $free;
+        $disk = DiskInformation::make();
+        $this->disk_total = $disk->total;
+        $this->disk_free = $disk->free;
+        $this->disk_used = $disk->used;
         return $this;
     }
 

@@ -4,7 +4,7 @@ namespace Modules\Heartbeat\Dto;
 
 use RuntimeException;
 
-class CpuUsage
+class CpuInformation
 {
 
     public int $usage = 0;
