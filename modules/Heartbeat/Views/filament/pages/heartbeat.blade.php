@@ -2,6 +2,7 @@
 
     @php
         $composer = \Modules\Heartbeat\Dto\ComposerInformation::make()->configuration()->lockfile();
+        $git = \Modules\Heartbeat\Dto\GitInformation::make()->discover();
     @endphp
 
     <div class="flex flex-col gap-4">
@@ -14,7 +15,26 @@
             <x-slot name="description">
                 {{ PHP_OS_FAMILY }}, {{ PHP_OS }}
             </x-slot>
+            <div class="flex flex-col gap-2 w-full">
 
+                <p class="flex flex-row gap-2 w-full">
+                    <strong>Branch</strong>
+                    <span>{{ $git->branch }}</span>
+                </p>
+
+                <p class="flex flex-row gap-2 w-full">
+                    <strong>Head</strong>
+                    <span>{{ $git->head }}</span>
+                </p>
+
+                <p class="flex flex-row gap-2 w-full">
+                    <strong>Modified at</strong>
+                    <span x-tooltip="{content: '{{ $git->headModifiedAt->timestamp }}'}">
+                        {{ $git->headModifiedAt->format('Y.m.d. H:i:s') }}
+                    </span>
+                </p>
+
+            </div>
         </x-filament::section>
 
         {{-- Composer configuration --}}

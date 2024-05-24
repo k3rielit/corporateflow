@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Heartbeat\Database\Factories\HeartbeatEntryFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\Heartbeat\Dto\GitInformation;
 use RuntimeException;
 
 /**
@@ -84,33 +85,10 @@ class HeartbeatEntry extends Model
 
     public function git(): static
     {
-        $headFile = base_path('.git/HEAD');
-        if (!is_file($headFile)) {
-            return $this;
-        }
-
-        try {
-            $headFileContent = file_get_contents('.git/HEAD');
-        } catch (\Throwable $exception) {
-            return $this;
-        }
-        preg_match('#^ref:(.+)$#', $headFileContent, $matches);
-        $currentHead = trim($matches[1]);
-        $currentHeadFile = base_path(".git/{$currentHead}");
-
-        if ($currentHead && is_file($currentHeadFile)) {
-            // If the file contains the path to the hash
-            $this->git_branch = $currentHead;
-            try {
-                $this->git_head = trim(file_get_contents($currentHeadFile) ?? '');
-                $this->git_head_modified_at = date('Y-m-d H:i:s', filemtime($currentHeadFile) ?? 0);
-            } catch (\Throwable $exception) {
-            }
-        } else if ($currentHead) {
-            // When the file only contains the hash, not the path to the hash
-            $this->git_head = $currentHead;
-        }
-
+        $git = GitInformation::make()->discover();
+        $this->git_branch = $git->branch;
+        $this->git_head = $git->head;
+        $this->git_head_modified_at = $git->headModifiedAt->format('Y.m.d. H:i:s');
         return $this;
     }
 
