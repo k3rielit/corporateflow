@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Heartbeat\Database\Factories\HeartbeatEntryFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Heartbeat\Dto\GitInformation;
+use Modules\Heartbeat\Dto\MemoryInformation;
 use RuntimeException;
 
 /**
@@ -49,25 +50,11 @@ class HeartbeatEntry extends Model
 
     public function memory(): static
     {
-        $memoryTotal = match (PHP_OS_FAMILY) {
-            'Darwin' => intval(`sysctl hw.memsize | grep -Eo '[0-9]+'` / 1024 / 1024),
-            'Linux' => intval(`cat /proc/meminfo | grep MemTotal | grep -E -o '[0-9]+'` / 1024),
-            'Windows' => intval(((int)trim(`wmic ComputerSystem get TotalPhysicalMemory | more +1`)) / 1024 / 1024),
-            'BSD' => intval(`sysctl hw.physmem | grep -Eo '[0-9]+'` / 1024 / 1024),
-            default => throw new RuntimeException('The pulse:check command does not currently support ' . PHP_OS_FAMILY),
-        };
+        $memory = MemoryInformation::make()->init();
 
-        $memoryUsed = match (PHP_OS_FAMILY) {
-            'Darwin' => $memoryTotal - intval(intval(`vm_stat | grep 'Pages free' | grep -Eo '[0-9]+'`) * intval(`pagesize`) / 1024 / 1024), // MB
-            'Linux' => $memoryTotal - intval(`cat /proc/meminfo | grep MemAvailable | grep -E -o '[0-9]+'` / 1024), // MB
-            'Windows' => $memoryTotal - intval(((int)trim(`wmic OS get FreePhysicalMemory | more +1`)) / 1024), // MB
-            'BSD' => intval(intval(`( sysctl vm.stats.vm.v_cache_count | grep -Eo '[0-9]+' ; sysctl vm.stats.vm.v_inactive_count | grep -Eo '[0-9]+' ; sysctl vm.stats.vm.v_active_count | grep -Eo '[0-9]+' ) | awk '{s+=$1} END {print s}'`) * intval(`pagesize`) / 1024 / 1024), // MB
-            default => throw new RuntimeException('The pulse:check command does not currently support ' . PHP_OS_FAMILY),
-        };
-
-        $this->memory_total = $memoryTotal;
-        $this->memory_used = $memoryUsed;
-        $this->memory_free = $memoryTotal - $memoryUsed;
+        $this->memory_total = $memory->total;
+        $this->memory_used = $memory->used;
+        $this->memory_free = $memory->free;
         return $this;
     }
 
