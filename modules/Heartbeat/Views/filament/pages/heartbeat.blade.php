@@ -4,6 +4,7 @@
         $composer = \Modules\Heartbeat\Dto\ComposerInformation::make()->configuration()->lockfile();
         $git = \Modules\Heartbeat\Dto\GitInformation::make()->discover();
         $cpu = \Modules\Heartbeat\Dto\CpuInformation::make()->name();
+        $timezone = config('app.timezone', 'Europe/Budapest');
     @endphp
 
     <div class="flex flex-col gap-4">
@@ -29,9 +30,9 @@
                 </p>
 
                 <p class="flex flex-row gap-2 w-full">
-                    <strong>Modified at</strong>
+                    <strong>Deployed</strong>
                     <span x-tooltip="{content: '{{ $git->headModifiedAt->timestamp }}'}">
-                        {{ $git->headModifiedAt->format('Y.m.d. H:i:s') }}
+                        {{ $git->headModifiedAt->timezone($timezone)->format('Y.m.d. H:i:s') }} ({{ $timezone }})
                     </span>
                 </p>
 
