@@ -39,7 +39,7 @@ class HeartbeatEntry extends Model
 
     public function cpu(): static
     {
-        $this->cpu_usage = CpuInformation::make()->init()->usage;
+        $this->cpu_usage = CpuInformation::make()->usage()->usage;
         return $this;
     }
 

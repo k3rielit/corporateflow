@@ -3,6 +3,7 @@
     @php
         $composer = \Modules\Heartbeat\Dto\ComposerInformation::make()->configuration()->lockfile();
         $git = \Modules\Heartbeat\Dto\GitInformation::make()->discover();
+        $cpu = \Modules\Heartbeat\Dto\CpuInformation::make()->name();
     @endphp
 
     <div class="flex flex-col gap-4">
@@ -13,7 +14,7 @@
                 Laravel {{ Illuminate\Foundation\Application::VERSION }} (PHP {{ PHP_VERSION }})
             </x-slot>
             <x-slot name="description">
-                {{ PHP_OS_FAMILY }}, {{ PHP_OS }}
+                {{ PHP_OS_FAMILY }}, {{ PHP_OS }}, {{ $cpu->name }}
             </x-slot>
             <div class="flex flex-col gap-2 w-full">
 

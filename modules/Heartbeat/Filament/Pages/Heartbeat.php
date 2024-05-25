@@ -5,6 +5,7 @@ namespace Modules\Heartbeat\Filament\Pages;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 use Filament\Support\Enums\MaxWidth;
+use Modules\Heartbeat\Filament\Widgets\SystemInformationWidget;
 
 class Heartbeat extends Page
 {
@@ -39,7 +40,7 @@ class Heartbeat extends Page
      */
     public function getHeaderWidgetsColumns(): int|string|array
     {
-        return 2;
+        return 1;
     }
 
     /**
@@ -47,7 +48,7 @@ class Heartbeat extends Page
      */
     public function getFooterWidgetsColumns(): int|string|array
     {
-        return 2;
+        return 1;
     }
 
     /**
@@ -56,7 +57,7 @@ class Heartbeat extends Page
     protected function getHeaderWidgets(): array
     {
         return [
-            //
+            SystemInformationWidget::class,
         ];
     }
 

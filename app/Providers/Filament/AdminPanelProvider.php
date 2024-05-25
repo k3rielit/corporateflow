@@ -31,12 +31,18 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Purple,
             ])
+            ->maxContentWidth(MaxWidth::Full)
+            ->sidebarCollapsibleOnDesktop()
+            // App
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
             ->discoverClusters(in: app_path('Filament/Admin/Clusters'), for: 'App\\Filament\\Admin\\Clusters')
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
-            ->maxContentWidth(MaxWidth::Full)
-            ->sidebarCollapsibleOnDesktop()
+            // Modules.Heartbeat
+            ->discoverResources(in: module_path('Heartbeat/Filament/Resources'), for: 'Modules\\Heartbeat\\Filament\\Resources')
+            ->discoverPages(in: module_path('Heartbeat/Filament/Pages'), for: 'Modules\\Heartbeat\\Filament\\Pages')
+            ->discoverClusters(in: module_path('Heartbeat/Filament/Clusters'), for: 'Modules\\Heartbeat\\Filament\\Clusters')
+            ->discoverWidgets(in: module_path('Heartbeat/Filament/Widgets'), for: 'Modules\\Heartbeat\\Filament\\Widgets')
             ->pages([
                 Pages\Dashboard::class,
                 Heartbeat::class,
